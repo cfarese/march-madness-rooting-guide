@@ -1,0 +1,11 @@
+{
+    "r2": ["Creighton", "Wisconsin", "Houston", "Purdue", "Auburn", "BYU", "McNeese", "Tennessee", "Texas_A&M", "Arkansas",
+            "Drake", "Gonzaga", "Michigan", "Texas_Tech", "St._John's", "UCLA"],
+    "sixteen": [],
+    "eight": [],
+    "four": [],
+    "championship": [],
+    "winner": [],
+    "eliminated": ["Louisville", "Montana", "HPU", "SIUE", "Alabama_State", "Yale", "Missouri", "Kansas", "VCU", "Montana", "Clemson",
+                    "Wofford", "UCSD", "UNCW", "Omaha", "Georgia", "Utah_State"]
+}
