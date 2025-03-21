@@ -162,4 +162,5 @@ df = pd.DataFrame({
     f'{team2} Pot': team2PointsTotals[1],
 })
 
+df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
 print(df.to_string(index=False))
