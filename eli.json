@@ -1,0 +1,15 @@
+{
+    "r2": ["Auburn", "Creighton", "UCSD", "Yale", "Ole Miss", "Iowa_State", "Marquette", "Michigan State",
+            "Florida", "Oklahoma", "Memphis", "GCU", "Drake", "Texas_Tech", "Kansas", "St._John's",
+            "Duke", "Mississippi_State", "Liberty", "Akron", "VCU", "Montana", "Saint_Mary's", "Alabama",
+            "Houston", "Georgia", "Clemson", "Purdue", "Illinois", "Kentucky", "UCLA", "Tennessee"
+            ],
+    "sixteen": ["Auburn", "UCSD", "Ole_Miss", "Michigan_State",
+                "Florida", "Memphis", "Texas_Tech", "Kansas",
+                "Duke", "Liberty", "VCU", "Alabama",
+                "Houston", "Clemson", "Kentucky", "Tennessee"],
+    "eight": ["Auburn", "Ole_Miss", "Florida", "Texas_Tech", "Duke", "Alabama", "Clemson", "Tennessee"],
+    "four": ["Ole_Miss", "Florida", "Duke", "Tennessee"],
+    "championship": ["Florida", "Duke"],
+    "winner": ["Florida"]
+}
