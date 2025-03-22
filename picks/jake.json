@@ -1,15 +1,15 @@
 {
-    "r2": ["Auburn", "Louisville", "Michigan", "Texas_A&M", "Ole_Miss", "Lipscomb", "Marquette", "Michigan_State",
+    "r2": ["Auburn", "Louisville", "Michigan", "Texas_AM", "Ole_Miss", "Lipscomb", "Marquette", "Michigan_State",
             "Florida", "Connecticut", "Memphis", "Maryland", "Missouri", "Texas_Tech", "Kansas", "Omaha",
             "Duke", "Mississippi_State", "Liberty", "Arizona", "BYU", "Wisconsin", "Vanderbilt", "Alabama",
             "Houston", "Georgia", "Clemson", "Purdue", "Illinois", "Kentucky", "UCLA", "Tennessee"
             ],
-    "sixteen": ["Auburn", "Texas_A&M", "Ole_Miss", "Michigan_State",
+    "sixteen": ["Auburn", "Texas_AM", "Ole_Miss", "Michigan_State",
                 "Florida", "Memphis", "Texas_Tech", "Kansas",
                 "Mississippi_State", "Liberty", "Wisconsin", "Alabama",
                 "Georgia", "Purdue", "Illinois", "Tennessee"],
-    "eight": ["Texas_A&M", "Michigan_State", "Florida", "Texas_Tech", "Liberty", "Wisconsin", "Georgia", "Tennessee"],
-    "four": ["Texas_A&M", "Florida", "Wisconsin", "Tennessee"],
+    "eight": ["Texas_AM", "Michigan_State", "Florida", "Texas_Tech", "Liberty", "Wisconsin", "Georgia", "Tennessee"],
+    "four": ["Texas_AM", "Florida", "Wisconsin", "Tennessee"],
     "championship": ["Florida", "Wisconsin"],
     "winner": ["Florida"]
 }
