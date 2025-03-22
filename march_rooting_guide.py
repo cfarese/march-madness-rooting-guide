@@ -1,6 +1,7 @@
 import json
 import sys
 import pandas as pd
+import copy
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -11,9 +12,14 @@ eightresults = bracket.get("eight", [])
 fourresults = bracket.get("four", [])
 championshipresults = bracket.get("championship", [])
 winnerresults = bracket.get("winner", [])
-eliminatedresults = bracket.get("eliminated", [])
-
-totalresults = [r2results, sixteenresults, eightresults, fourresults, championshipresults, winnerresults, eliminatedresults]
+eliminatedr1 = bracket.get("eliminatedr1", [])
+eliminatedr2 = bracket.get("eliminatedr2", [])
+eliminatedsixteen = bracket.get("eliminatedsixteen", [])
+eliminatedeight = bracket.get("eliminatedeight", [])
+eliminatedfour = bracket.get("eliminatedfour", [])
+eliminatedchampionship = bracket.get("eliminatedchampionship", [])
+totalresults = [r2results, sixteenresults, eightresults, fourresults, championshipresults, winnerresults, eliminatedr1, eliminatedr2,
+                eliminatedsixteen, eliminatedeight, eliminatedfour, eliminatedchampionship]
 
 team1 = sys.argv[2]
 team2 = sys.argv[3]
@@ -74,19 +80,19 @@ def calculator(givenresults):
         for team in givenresults[6]:
             if(team in r2picks[i]):
                 possibleScore -= 1
-        for team in givenresults[6]:
+        for team in (givenresults[6] + givenresults[7]):
             if(team in sixteenpicks[i]):
                 possibleScore -= 2
-        for team in givenresults[6]:
+        for team in (givenresults[6] + givenresults[7] + givenresults[8]):
             if(team in eightpicks[i]):
                 possibleScore -= 4
-        for team in givenresults[6]:
+        for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9]):
             if(team in fourpicks[i]):
                 possibleScore -= 8
-        for team in givenresults[6]:
+        for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9] + givenresults[10]):
             if(team in championshippicks[i]):
                 possibleScore -= 16
-        for team in givenresults[6]:
+        for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9] + givenresults[10] + givenresults[11]):
             if(team in winnerpicks[i]):
                 possibleScore -= 32
 
@@ -103,19 +109,17 @@ actualPointsTotals = calculator(totalresults)
 
 ## Now we calculate it if team 1 wins
 
-team1results = totalresults
+team1results = copy.deepcopy(totalresults)
 team1results[int(round)-1].append(team1)
-team1results[6].append(team2)
+team1results[6 + int(round)-1].append(team2)
 
 team1PointsTotals = calculator(team1results)
 
 ## Now for team 2
 
-team2results = totalresults
+team2results = copy.deepcopy(totalresults)
 team2results[int(round)-1].append(team2)
-team2results[int(round)-1].remove(team1)
-team2results[6].append(team1)
-team2results[6].remove(team2)
+team2results[6 + int(round)-1].append(team1)
 
 team2PointsTotals = calculator(team2results)
 
