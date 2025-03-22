@@ -47,7 +47,9 @@ for arg in sys.argv[5:]:
 
 
 for arg in sys.argv[5:]:
-    players.append(arg.replace('.json', ''))
+    x = (arg.replace('.json', ''))
+    x = x.replace('picks/', '')
+    players.append(x)
 
 def calculator(givenresults):
     i = 0

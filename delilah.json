@@ -1,14 +1,14 @@
 {
     "r2": ["Auburn", "Creighton", "UCSD", "Texas_A&M", "Ole_Miss", "Iowa_State", "Marquette", "Michigan_State",
-            "Florida", "Connecticut", "Memphis", "Maryland", "Drake", "Texas_Tech", "Arkansas", "St._John's",
-            "Duke", "Baylor", "Oregon", "Arizona", "BYU", "Wisconsin", "Saint_Mary's", "Alabama",
+            "Florida", "Connecticut", "Memphis", "Maryland", "Drake", "Texas_Tech", "Arkansas", "St._Johns",
+            "Duke", "Baylor", "Oregon", "Arizona", "BYU", "Wisconsin", "Saint_Marys", "Alabama",
             "Houston", "Gonzaga", "Clemson", "HPU", "Illinois", "Kentucky", "Utah_State", "Tennessee"
             ],
     "sixteen": ["Auburn", "UCSD", "Ole_Miss", "Michigan_State",
-                "Florida", "Memphis", "Drake", "St._John's",
+                "Florida", "Memphis", "Drake", "St._Johns",
                 "Duke", "Arizona", "BYU", "Alabama",
                 "Houston", "Clemson", "Illinois", "Tennessee"],
-    "eight": ["Auburn", "Michigan_State", "Florida", "St._John's", "Duke", "Alabama", "Houston", "Tennessee"],
+    "eight": ["Auburn", "Michigan_State", "Florida", "St._Johns", "Duke", "Alabama", "Houston", "Tennessee"],
     "four": ["Michigan_State", "Florida", "Alabama", "Tennessee"],
     "championship": ["Florida", "Alabama"],
     "winner": ["Florida"]

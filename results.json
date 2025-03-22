@@ -1,18 +1,15 @@
 {
-    "r2": ["Creighton", "Wisconsin", "Houston", "Purdue", "Auburn", "BYU", "McNeese", "Tennessee", "Texas_A&M", "Arkansas",
-            "Drake", "Gonzaga", "Michigan", "Texas_Tech", "St._John's", "UCLA", "Baylor", "Alabama", "Iowa_State", "Colorado_State",
-            "Duke", "Saint_Mary's", "Ole Miss", "Maryland", "Florida", "Kentucky", "New_Mexico"],
-    "sixteen": [],
-    "eight": [],
-    "four": [],
-    "championship": [],
-    "winner": [],
-    "eliminatedr1": ["Louisville", "Montana", "HPU", "SIUE", "Alabama_State", "Yale", "Missouri", "Kansas", "VCU", "Montana", "Clemson",
-                    "Wofford", "UCSD", "UNCW", "Omaha", "Georgia", "Utah_State", "Mississippi_State", "RMU", "Lipscomb", "Memphis",
-                    "Mt_St._Mary's", "Vanderbilt", "North_Carolina", "GCU", "Norfolk_State", "Troy", "Marquette"],
-    "eliminatedr2": [],
-    "eliminatedsixteen": [],
-    "eliminatedeight": [],
-    "eliminatedfour": [],
-    "eliminatedchampionship": []
+    "r2": ["Auburn", "Louisville", "Michigan", "Texas_A&M", "Ole_Miss", "Iowa_State", "Marquette", "Michigan_State",
+            "Florida", "Connecticut", "Memphis", "Maryland", "Missouri", "Texas_Tech", "Kansas", "St._Johns",
+            "Duke", "Mississippi_State", "Oregon", "Arizona", "BYU", "Wisconsin", "Saint_Marys", "Alabama",
+            "Houston", "Gonzaga", "Clemson", "Purdue", "Illinois", "Kentucky", "UCLA", "Tennessee"
+            ],
+    "sixteen": ["Auburn", "Texas_A&M", "Ole_Miss", "Michigan_State",
+                "Florida", "Maryland", "Texas_Tech", "St._Johns",
+                "Duke", "Arizona", "Wisconsin", "Alabama",
+                "Houston", "Purdue", "Kentucky", "Tennessee"],
+    "eight": ["Auburn", "Michigan_State", "Florida", "St._Johns", "Duke", "Alabama", "Houston", "Tennessee"],
+    "four": ["Auburn", "Florida", "Duke", "Tennessee"],
+    "championship": ["Florida", "Tennessee"],
+    "winner": ["Florida"]
 }
