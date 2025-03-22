@@ -1,11 +1,18 @@
 {
     "r2": ["Creighton", "Wisconsin", "Houston", "Purdue", "Auburn", "BYU", "McNeese", "Tennessee", "Texas_A&M", "Arkansas",
-            "Drake", "Gonzaga", "Michigan", "Texas_Tech", "St._John's", "UCLA"],
+            "Drake", "Gonzaga", "Michigan", "Texas_Tech", "St._John's", "UCLA", "Baylor", "Alabama", "Iowa_State", "Colorado_State",
+            "Duke", "Saint_Mary's", "Ole Miss", "Maryland", "Florida", "Kentucky", "New_Mexico"],
     "sixteen": [],
     "eight": [],
     "four": [],
     "championship": [],
     "winner": [],
-    "eliminated": ["Louisville", "Montana", "HPU", "SIUE", "Alabama_State", "Yale", "Missouri", "Kansas", "VCU", "Montana", "Clemson",
-                    "Wofford", "UCSD", "UNCW", "Omaha", "Georgia", "Utah_State"]
+    "eliminatedr1": ["Louisville", "Montana", "HPU", "SIUE", "Alabama_State", "Yale", "Missouri", "Kansas", "VCU", "Montana", "Clemson",
+                    "Wofford", "UCSD", "UNCW", "Omaha", "Georgia", "Utah_State", "Mississippi_State", "RMU", "Lipscomb", "Memphis",
+                    "Mt_St._Mary's", "Vanderbilt", "North_Carolina", "GCU", "Norfolk_State", "Troy", "Marquette"],
+    "eliminatedr2": [],
+    "eliminatedsixteen": [],
+    "eliminatedeight": [],
+    "eliminatedfour": [],
+    "eliminatedchampionship": []
 }
