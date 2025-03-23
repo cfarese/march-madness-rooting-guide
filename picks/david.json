@@ -9,7 +9,7 @@
                 "Duke", "Arizona", "BYU", "Alabama",
                 "Houston", "Clemson", "Kentucky", "Tennessee"],
     "eight": ["Auburn", "Michigan_State", "Florida", "St._Johns", "Duke", "Alabama", "Houston", "Tennessee"],
-    "four": ["Michigan_State", "Florida", "Duke", "Tennessee"],
+    "four": ["Auburn", "Florida", "Duke", "Tennessee"],
     "championship": ["Florida", "Duke"],
     "winner": ["Florida"]
 }
