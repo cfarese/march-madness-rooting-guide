@@ -171,7 +171,13 @@ def monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win
             prev_round = sim_results[round_index - 1]
 
             if len(prev_round) % 2 != 0:
+                if(team1 == force_winner):
+                    loser = team2
+                else:
+                    loser = team1
+                prev_round.remove(loser)
                 raise ValueError(f"Odd number of teams in round {round_index - 1}: {prev_round}")
+
 
             sim_results[round_index] = []
             sim_results[round_index + 6] = []
