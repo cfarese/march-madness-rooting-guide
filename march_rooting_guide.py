@@ -71,8 +71,8 @@ def calculator(givenresults):
         for result in givenresults[1]:
             if(result in sixteenpicks[i]):
                 score += 2
-        for results in givenresults[2]:
-            if(results in eightpicks[i]):
+        for result in givenresults[2]:
+            if(result in eightpicks[i]):
                 score += 4
         for result in givenresults[3]:
             if(result in fourpicks[i]):
@@ -154,12 +154,12 @@ def odds_calculator(teamA, teamB): ## args should be team names
 
     return [spread, team1_win_prob, team2_win_prob]
 
-def monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win_prob):
+def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob):
     team1_counts = [0] * len(players)
     team2_counts = [0] * len(players)
 
     def simulate(results, force_winner):
-        sim_results = copy.deepcopy(results)
+        sim_results = copy.deepcopy(results) #results = totalresults
 
         results_index = results[int(round_num)-2].index(force_winner)
         results_index = results_index // 2
@@ -202,6 +202,8 @@ def monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win
                 elif(team2 in sim_results[round_index]):
                     sim_results[round_index].remove(team2)
                 sim_results[round_index].insert(results_index, force_winner)
+
+            results_index // 2
 
         # Score the result
         sim_scores = calculator(sim_results)[0]
