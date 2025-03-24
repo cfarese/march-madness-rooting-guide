@@ -3,6 +3,9 @@ import sys
 import pandas as pd
 import copy
 import math
+import random
+
+simulations = 100000
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -32,6 +35,7 @@ eightpicks = []
 fourpicks = []
 championshippicks = []
 winnerpicks = []
+
 
 players = []
 
@@ -112,38 +116,23 @@ actualPointsTotals = calculator(totalresults)
 
 ## Now we calculate it if team 1 wins
 
-team1results = copy.deepcopy(totalresults)
-team1results[int(round_num)-1].append(team1)
-team1results[6 + int(round_num)-1].append(team2)
+## Team1 wins
+forced_team1 = copy.deepcopy(totalresults)
+forced_team1[int(round_num)-1] = [team1]
+forced_team1[6 + int(round_num)-1] = [team2]
+team1PointsTotals = calculator(forced_team1)
 
-team1PointsTotals = calculator(team1results)
+## Team2 wins
+forced_team2 = copy.deepcopy(totalresults)
+forced_team2[int(round_num)-1] = [team2]
+forced_team2[6 + int(round_num)-1] = [team1]
+team2PointsTotals = calculator(forced_team2)
 
-## Now for team 2
-
-team2results = copy.deepcopy(totalresults)
-team2results[int(round_num)-1].append(team2)
-team2results[6 + int(round_num)-1].append(team1)
-
-team2PointsTotals = calculator(team2results)
 
 shortTermRoot1 = []
 shortTermRoot2 = []
 longTermRoot1 = []
 longTermRoot2 = []
-
-j = 0
-while(j < len(players)):
-    if(team1PointsTotals[0][j] > actualPointsTotals[0][j]):
-        shortTermRoot1.append(players[j])
-    elif (team2PointsTotals[0][j] > actualPointsTotals[0][j]):
-        shortTermRoot2.append(players[j])
-
-    if (max(team1PointsTotals[1])-team1PointsTotals[1][j] < max(team2PointsTotals[1])-team2PointsTotals[1][j]):
-        longTermRoot1.append(players[j])
-    elif (max(team2PointsTotals[1])-team2PointsTotals[1][j] < max(team1PointsTotals[1])-team1PointsTotals[1][j]):
-        longTermRoot2.append(players[j])
-
-    j += 1
 
 def normal_cdf(x, mean=0, std=1):
     #Approximate the cumulative distribution function for a normal distribution
@@ -165,20 +154,116 @@ def odds_calculator(teamA, teamB): ## args should be team names
 
     return [spread, team1_win_prob, team2_win_prob]
 
+def monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win_prob):
+    team1_counts = [0] * len(players)
+    team2_counts = [0] * len(players)
+
+    def simulate(results, force_winner):
+        sim_results = copy.deepcopy(results)
+
+        results_index = results[int(round_num)-2].index(force_winner)
+        results_index = results_index // 2
+
+        insert_into_round = int(round_num) - 1
+
+        # Simulate the remaining tournament
+        for round_index in range(2, 6):
+            prev_round = sim_results[round_index - 1]
+
+            if len(prev_round) % 2 != 0:
+                raise ValueError(f"Odd number of teams in round {round_index - 1}: {prev_round}")
+
+            sim_results[round_index] = []
+            sim_results[round_index + 6] = []
+            current_round = sim_results[round_index]
+            eliminated = sim_results[round_index + 6]
+
+            for i in range(0, len(prev_round), 2):
+                teamA = prev_round[i]
+                teamB = prev_round[i + 1]
+
+                _, probA, _ = odds_calculator(teamA, teamB)
+                winner = teamA if random.random() < probA else teamB
+                loser = teamB if winner == teamA else teamA
+
+                current_round.append(winner)
+                eliminated.append(loser)
+
+
+            if(round_index == insert_into_round):
+                if(team1 in sim_results[round_index]):
+                    sim_results[round_index].remove(team1)
+                elif(team2 in sim_results[round_index]):
+                    sim_results[round_index].remove(team2)
+                sim_results[round_index].insert(results_index, force_winner)
+
+        # Score the result
+        sim_scores = calculator(sim_results)[0]
+        max_score = max(sim_scores)
+        wins = [1 if score == max_score else 0 for score in sim_scores]
+        return wins
+
+    for _ in range(simulations):
+        team1_win = simulate(totalresults, team1)
+        team2_win = simulate(totalresults, team2)
+
+        for i in range(len(players)):
+            team1_counts[i] += team1_win[i]
+            team2_counts[i] += team2_win[i]
+
+    # Convert counts to percentages
+    team1_probs = [round(c / simulations * 100, 2) for c in team1_counts]
+    team2_probs = [round(c / simulations * 100, 2) for c in team2_counts]
+
+    # Weighted average for baseline
+    baseline = [
+        round(team1_win_prob * t1 + team2_win_prob * t2, 2)
+        for t1, t2 in zip(team1_probs, team2_probs)
+    ]
+
+    # Delta: who gains most from team1 winning vs team2 winning
+    delta = [round(t1 - t2, 2) for t1, t2 in zip(team1_probs, team2_probs)]
+
+    return [baseline, team1_probs, team2_probs, delta]
+
+
+
+
+
+
 odds_array = odds_calculator(team1, team2)
 spread = odds_array[0]
 team1_win_prob = odds_array[1]
 team2_win_prob = odds_array[2]
 
+probability_of_winning = monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win_prob)
+
+j = 0
+while(j < len(players)):
+    if(team1PointsTotals[0][j] > actualPointsTotals[0][j]):
+        shortTermRoot1.append(players[j])
+    elif (team2PointsTotals[0][j] > actualPointsTotals[0][j]):
+        shortTermRoot2.append(players[j])
+
+    if (probability_of_winning[3][j] > 0):
+        longTermRoot1.append(players[j])
+    elif (probability_of_winning[3][j] < 0):
+        longTermRoot2.append(players[j])
+
+    j += 1
+
+
+
 print("")
 if(team1_win_prob > team2_win_prob):
     print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
 elif(team1_win_prob < team2_win_prob):
-    print("The spread is estimated to be +" + str(spread) + " in favor of " + team2)
+    print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
 print("")
 print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
 print(team2 + " has an estimated win probability of " + str(round(team2_win_prob * 100, 2)) + "%")
-
+print("")
+print("Probabilities calculated based on " + str(simulations) + " simulations")
 print("")
 print("The following players are rooting for " + team1 + " short term:")
 print(shortTermRoot1)
@@ -197,10 +282,14 @@ df = pd.DataFrame({
     'Player': players,
     'Points': actualPointsTotals[0],
     'Potential': actualPointsTotals[1],
+    'Win Prob': probability_of_winning[0],
     f'{team1} Pts': team1PointsTotals[0],
     f'{team1} Pot': team1PointsTotals[1],
+    f'{team1} Win Prob': probability_of_winning[1],
     f'{team2} Pts': team2PointsTotals[0],
     f'{team2} Pot': team2PointsTotals[1],
+    f'{team2} Win Prob': probability_of_winning[2],
+    f'Delta': probability_of_winning[3]
 })
 
 df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
