@@ -150,16 +150,25 @@ def normal_cdf(x, mean=0, std=1):
     z = (x - mean) / (std * math.sqrt(2))
     return 0.5 * (1 + math.erf(z))
 
-with open("kenpom.json", "r") as file:
-    kenpom = json.load(file)
-    kenpom1 = kenpom.get(team1)
-    kenpom2 = kenpom.get(team2)
+def odds_calculator(teamA, teamB): ## args should be team names
 
-spread = (kenpom1 - kenpom2) * 0.68
-spread = round(spread / 0.5) * 0.5
+    with open("kenpom.json", "r") as file:
+        kenpom = json.load(file)
+        kenpom1 = kenpom.get(teamA)
+        kenpom2 = kenpom.get(teamB)
 
-team1_win_prob = normal_cdf(spread / 9.5)
-team2_win_prob = 1 - team1_win_prob
+    spread = (kenpom1 - kenpom2) * 0.68
+    spread = round(spread / 0.5) * 0.5
+
+    team1_win_prob = normal_cdf(spread / 9.5)
+    team2_win_prob = 1 - team1_win_prob
+
+    return [spread, team1_win_prob, team2_win_prob]
+
+odds_array = odds_calculator(team1, team2)
+spread = odds_array[0]
+team1_win_prob = odds_array[1]
+team2_win_prob = odds_array[2]
 
 print("")
 if(team1_win_prob > team2_win_prob):
