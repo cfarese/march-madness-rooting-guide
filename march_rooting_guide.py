@@ -5,7 +5,7 @@ import copy
 import math
 import random
 
-simulations = 100000
+simulations = 1000
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -159,32 +159,49 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
     team2_counts = [0] * len(players)
 
     def simulate(results, force_winner):
-        sim_results = copy.deepcopy(results) #results = totalresults
-
-        results_index = results[int(round_num)-2].index(force_winner)
-        results_index = results_index // 2
-
+        sim_results = copy.deepcopy(results)
         insert_into_round = int(round_num) - 1
+        
+        # Get the teams from the previous round
+        prev_round_teams = sim_results[insert_into_round - 1] if insert_into_round > 0 else []
+        
+        # Build the current round with the forced winner
+        sim_results[insert_into_round] = []
+        sim_results[insert_into_round + 6] = []
+        
+        # Process the previous round's teams in pairs
+        for i in range(0, len(prev_round_teams), 2):
+            if i + 1 >= len(prev_round_teams):
+                break
+                
+            teamA = prev_round_teams[i]
+            teamB = prev_round_teams[i + 1]
+            
+            # If this is the matchup we're forcing
+            if (teamA == team1 and teamB == team2) or (teamA == team2 and teamB == team1):
+                sim_results[insert_into_round].append(force_winner)
+                sim_results[insert_into_round + 6].append(team2 if force_winner == team1 else team1)
+            else:
+                # Simulate this matchup normally
+                _, probA, _ = odds_calculator(teamA, teamB)
+                winner = teamA if random.random() < probA else teamB
+                loser = teamB if winner == teamA else teamA
+                sim_results[insert_into_round].append(winner)
+                sim_results[insert_into_round + 6].append(loser)
 
         # Simulate the remaining tournament
-        for round_index in range(2, 6):
+        for round_index in range(insert_into_round + 1, 6):
             prev_round = sim_results[round_index - 1]
-
-            if len(prev_round) % 2 != 0:
-                if(team1 == force_winner):
-                    loser = team2
-                else:
-                    loser = team1
-                prev_round.remove(loser)
-                raise ValueError(f"Odd number of teams in round {round_index - 1}: {prev_round}")
-
-
             sim_results[round_index] = []
             sim_results[round_index + 6] = []
             current_round = sim_results[round_index]
             eliminated = sim_results[round_index + 6]
 
+            # Process teams in pairs
             for i in range(0, len(prev_round), 2):
+                if i + 1 >= len(prev_round):
+                    break
+                    
                 teamA = prev_round[i]
                 teamB = prev_round[i + 1]
 
@@ -194,16 +211,6 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
 
                 current_round.append(winner)
                 eliminated.append(loser)
-
-
-            if(round_index == insert_into_round):
-                if(team1 in sim_results[round_index]):
-                    sim_results[round_index].remove(team1)
-                elif(team2 in sim_results[round_index]):
-                    sim_results[round_index].remove(team2)
-                sim_results[round_index].insert(results_index, force_winner)
-
-            results_index // 2
 
         # Score the result
         sim_scores = calculator(sim_results)[0]

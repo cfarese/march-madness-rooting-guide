@@ -1,11 +1,52 @@
-Example of running the program:
+# March Madness Rooting Guide
 
-python3 march_rooting_guide.py results.json Missouri Drake 1 christian.json david.json delilah.json
+A Python tool that helps you determine which team to root for in March Madness games based on your bracket picks and potential tournament outcomes.
 
-python3 [program name] [results file] [team 1] [team 2] [round that the game is played in] [pick JSONs]
+## Features
 
-There is a results.json that must be updated to current results
+- Calculates win probabilities based on KenPom ratings
+- Simulates tournament outcomes using Monte Carlo simulation
+- Shows both short-term and long-term rooting interests
+- Provides detailed statistics about potential points and tournament outcomes
 
-Include the two teams playing as team 1 and team 2. Make sure their names are the same as they are in the rest of the program
+## Usage
 
-Follow the same system as the other pick JSON files
+```bash
+python3 march_rooting_guide.py results.json team1 team2 round_num picks/*.json
+```
+
+### Arguments:
+- `results.json`: The current tournament results file
+- `team1`: First team in the matchup
+- `team2`: Second team in the matchup
+- `round_num`: The round number where the game is played (1-6)
+- `picks/*.json`: Path to bracket pick files
+
+### Example:
+```bash
+python3 march_rooting_guide.py results.json Michigan Michigan_State 4 picks/*.json
+```
+
+## Output
+
+The tool will show:
+- Estimated spread and win probabilities
+- Short-term rooting interests (based on immediate points)
+- Long-term rooting interests (based on tournament outcomes)
+- Detailed statistics for each player's bracket
+
+## Requirements
+
+- Python 3.x
+- Required packages:
+  - pandas
+  - json
+  - math
+  - random
+
+## Files
+
+- `march_rooting_guide.py`: Main script
+- `kenpom.json`: KenPom ratings data
+- `results.json`: Current tournament results
+- `picks/*.json`: Individual bracket picks
