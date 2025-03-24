@@ -2,6 +2,7 @@ import json
 import sys
 import pandas as pd
 import copy
+import math
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -23,7 +24,7 @@ totalresults = [r2results, sixteenresults, eightresults, fourresults, championsh
 
 team1 = sys.argv[2]
 team2 = sys.argv[3]
-round = sys.argv[4] ##provide the round the game is played in
+round_num = sys.argv[4] ##provide the round the game is played in
 
 r2picks = []
 sixteenpicks = []
@@ -112,16 +113,16 @@ actualPointsTotals = calculator(totalresults)
 ## Now we calculate it if team 1 wins
 
 team1results = copy.deepcopy(totalresults)
-team1results[int(round)-1].append(team1)
-team1results[6 + int(round)-1].append(team2)
+team1results[int(round_num)-1].append(team1)
+team1results[6 + int(round_num)-1].append(team2)
 
 team1PointsTotals = calculator(team1results)
 
 ## Now for team 2
 
 team2results = copy.deepcopy(totalresults)
-team2results[int(round)-1].append(team2)
-team2results[6 + int(round)-1].append(team1)
+team2results[int(round_num)-1].append(team2)
+team2results[6 + int(round_num)-1].append(team1)
 
 team2PointsTotals = calculator(team2results)
 
@@ -143,6 +144,31 @@ while(j < len(players)):
         longTermRoot2.append(players[j])
 
     j += 1
+
+def normal_cdf(x, mean=0, std=1):
+    #Approximate the cumulative distribution function for a normal distribution
+    z = (x - mean) / (std * math.sqrt(2))
+    return 0.5 * (1 + math.erf(z))
+
+with open("kenpom.json", "r") as file:
+    kenpom = json.load(file)
+    kenpom1 = kenpom.get(team1)
+    kenpom2 = kenpom.get(team2)
+
+spread = (kenpom1 - kenpom2) * 0.68
+spread = round(spread / 0.5) * 0.5
+
+team1_win_prob = normal_cdf(spread / 9.5)
+team2_win_prob = 1 - team1_win_prob
+
+print("")
+if(team1_win_prob > team2_win_prob):
+    print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
+elif(team1_win_prob < team2_win_prob):
+    print("The spread is estimated to be +" + str(spread) + " in favor of " + team2)
+print("")
+print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
+print(team2 + " has an estimated win probability of " + str(round(team2_win_prob * 100, 2)) + "%")
 
 print("")
 print("The following players are rooting for " + team1 + " short term:")
