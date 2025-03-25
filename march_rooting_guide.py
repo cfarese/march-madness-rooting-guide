@@ -274,6 +274,8 @@ if(team1_win_prob > team2_win_prob):
     print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
 elif(team1_win_prob < team2_win_prob):
     print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
+elif(team1_win_prob == team2_win_prob):
+    print("The spread is evens")
 print("")
 print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
 print(team2 + " has an estimated win probability of " + str(round(team2_win_prob * 100, 2)) + "%")
