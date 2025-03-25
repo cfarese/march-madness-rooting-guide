@@ -1,8 +1,8 @@
 {
-    "r2": ["Creighton", "Wisconsin", "Houston", "Purdue", "Auburn", "BYU", "McNeese", "Tennessee", "Texas_AM", "Arkansas",
-            "Drake", "Gonzaga", "Michigan", "Texas_Tech", "St._Johns", "UCLA", "Baylor", "Alabama", "Iowa_State", "Colorado_State",
-            "Duke", "Saint_Marys", "Ole_Miss", "Maryland", "Florida", "Kentucky", "New_Mexico", "Michigan_State", "Connecticut",
-            "Illinois", "Oregon", "Arizona"],
+    "r2": ["Auburn", "Creighton", "Michigan", "Texas_AM", "Ole_Miss", "Iowa_State", "New_Mexico", "Michigan_State",
+            "Florida", "Connecticut", "Colorado_State", "Maryland", "Drake", "Texas_Tech", "Arkansas", "St._Johns",
+            "Duke", "Baylor", "Oregon", "Arizona", "BYU", "Wisconsin", "Saint_Marys", "Alabama",
+            "Houston", "Gonzaga", "McNeese", "Purdue", "Illinois", "Kentucky", "UCLA", "Tennessee"],
     "sixteen": ["Auburn", "Michigan", "Ole_Miss", "Michigan_State", "Florida", "Maryland", "Texas_Tech", "Arkansas",
                 "Duke", "Arizona", "Alabama", "BYU", "Houston", "Purdue", "Kentucky", "Tennessee"],
     "eight": [],

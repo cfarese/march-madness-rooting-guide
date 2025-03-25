@@ -5,7 +5,7 @@ import copy
 import math
 import random
 
-simulations = 1000
+simulations = 10000
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
