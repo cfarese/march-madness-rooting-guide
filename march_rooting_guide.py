@@ -5,7 +5,8 @@ import copy
 import math
 import random
 
-simulations = 10_000
+
+simulations = 100_000
 
 # Check for -prob flag and remove it from arguments
 show_prob_only = "-prob" in sys.argv
@@ -329,6 +330,7 @@ if show_prob_only:
     })
     df = df.sort_values(by=['Win Prob'], ascending=False)
     print(df.to_string(index=False))
+    #df.to_csv('df.csv', index=False)
 else:
     print("")
     if (team1_win_prob > team2_win_prob):
