@@ -21,10 +21,11 @@ python3 march_rooting_guide.py results.json team1 team2 round_num picks/*.json
 - `team2`: Second team in the matchup
 - `round_num`: The round number where the game is played (1-6)
 - `picks/*.json`: Path to bracket pick files
+- `-prob`: Will only display probabilities in dataframe
 
 ### Example:
 ```bash
-python3 march_rooting_guide.py results.json Michigan Michigan_State 4 picks/*.json
+python3 march_rooting_guide.py results.json Michigan Michigan_State 4 picks/*.json -prob
 ```
 
 ## Output
