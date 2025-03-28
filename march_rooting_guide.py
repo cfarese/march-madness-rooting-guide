@@ -5,7 +5,7 @@ import copy
 import math
 import random
 
-simulations = 10000
+simulations = 100_000
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -22,12 +22,13 @@ eliminatedsixteen = bracket.get("eliminatedsixteen", [])
 eliminatedeight = bracket.get("eliminatedeight", [])
 eliminatedfour = bracket.get("eliminatedfour", [])
 eliminatedchampionship = bracket.get("eliminatedchampionship", [])
-totalresults = [r2results, sixteenresults, eightresults, fourresults, championshipresults, winnerresults, eliminatedr1, eliminatedr2,
+totalresults = [r2results, sixteenresults, eightresults, fourresults, championshipresults, winnerresults, eliminatedr1,
+                eliminatedr2,
                 eliminatedsixteen, eliminatedeight, eliminatedfour, eliminatedchampionship]
 
 team1 = sys.argv[2]
 team2 = sys.argv[3]
-round_num = sys.argv[4] ##provide the round the game is played in
+round_num = sys.argv[4]  ##provide the round the game is played in
 
 r2picks = []
 sixteenpicks = []
@@ -35,7 +36,6 @@ eightpicks = []
 fourpicks = []
 championshippicks = []
 winnerpicks = []
-
 
 players = []
 
@@ -50,11 +50,11 @@ for arg in sys.argv[5:]:
     championshippicks.append(bracket.get("championship", []))
     winnerpicks.append(bracket.get("winner", []))
 
-
 for arg in sys.argv[5:]:
     x = (arg.replace('.json', ''))
-    x = x.replace('picks/', '')
+    x = x.rsplit('/', 1)[-1]
     players.append(x)
+
 
 def calculator(givenresults):
     i = 0
@@ -64,43 +64,45 @@ def calculator(givenresults):
     players_points = []
     players_possible_points = []
 
-    while(i < len(players)):
+    while (i < len(players)):
         for result in givenresults[0]:
-            if(result in r2picks[i]):
+            if (result in r2picks[i]):
                 score += 1
         for result in givenresults[1]:
-            if(result in sixteenpicks[i]):
+            if (result in sixteenpicks[i]):
                 score += 2
         for result in givenresults[2]:
-            if(result in eightpicks[i]):
+            if (result in eightpicks[i]):
                 score += 4
         for result in givenresults[3]:
-            if(result in fourpicks[i]):
+            if (result in fourpicks[i]):
                 score += 8
         for result in givenresults[4]:
-            if(result in championshippicks[i]):
+            if (result in championshippicks[i]):
                 score += 16
         for result in givenresults[5]:
-            if(result in winnerpicks[i]):
+            if (result in winnerpicks[i]):
                 score += 32
 
         for team in givenresults[6]:
-            if(team in r2picks[i]):
+            if (team in r2picks[i]):
                 possibleScore -= 1
         for team in (givenresults[6] + givenresults[7]):
-            if(team in sixteenpicks[i]):
+            if (team in sixteenpicks[i]):
                 possibleScore -= 2
         for team in (givenresults[6] + givenresults[7] + givenresults[8]):
-            if(team in eightpicks[i]):
+            if (team in eightpicks[i]):
                 possibleScore -= 4
         for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9]):
-            if(team in fourpicks[i]):
+            if (team in fourpicks[i]):
                 possibleScore -= 8
         for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9] + givenresults[10]):
-            if(team in championshippicks[i]):
+            if (team in championshippicks[i]):
                 possibleScore -= 16
-        for team in (givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9] + givenresults[10] + givenresults[11]):
-            if(team in winnerpicks[i]):
+        for team in (
+                givenresults[6] + givenresults[7] + givenresults[8] + givenresults[9] + givenresults[10] + givenresults[
+            11]):
+            if (team in winnerpicks[i]):
                 possibleScore -= 32
 
         players_points.append(score)
@@ -112,34 +114,36 @@ def calculator(givenresults):
 
     return [players_points, players_possible_points]
 
+
 actualPointsTotals = calculator(totalresults)
 
 ## Now we calculate it if team 1 wins
 
 ## Team1 wins
 forced_team1 = copy.deepcopy(totalresults)
-forced_team1[int(round_num)-1] = [team1]
-forced_team1[6 + int(round_num)-1] = [team2]
+forced_team1[int(round_num) - 1] = [team1]
+forced_team1[6 + int(round_num) - 1] = [team2]
 team1PointsTotals = calculator(forced_team1)
 
 ## Team2 wins
 forced_team2 = copy.deepcopy(totalresults)
-forced_team2[int(round_num)-1] = [team2]
-forced_team2[6 + int(round_num)-1] = [team1]
+forced_team2[int(round_num) - 1] = [team2]
+forced_team2[6 + int(round_num) - 1] = [team1]
 team2PointsTotals = calculator(forced_team2)
-
 
 shortTermRoot1 = []
 shortTermRoot2 = []
 longTermRoot1 = []
 longTermRoot2 = []
 
+
 def normal_cdf(x, mean=0, std=1):
-    #Approximate the cumulative distribution function for a normal distribution
+    # Approximate the cumulative distribution function for a normal distribution
     z = (x - mean) / (std * math.sqrt(2))
     return 0.5 * (1 + math.erf(z))
 
-def odds_calculator(teamA, teamB): ## args should be team names
+
+def odds_calculator(teamA, teamB):  ## args should be team names
 
     with open("kenpom.json", "r") as file:
         kenpom = json.load(file)
@@ -154,6 +158,7 @@ def odds_calculator(teamA, teamB): ## args should be team names
 
     return [spread, team1_win_prob, team2_win_prob]
 
+
 def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob):
     team1_counts = [0] * len(players)
     team2_counts = [0] * len(players)
@@ -161,22 +166,22 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
     def simulate(results, force_winner):
         sim_results = copy.deepcopy(results)
         insert_into_round = int(round_num) - 1
-        
+
         # Get the teams from the previous round
         prev_round_teams = sim_results[insert_into_round - 1] if insert_into_round > 0 else []
-        
+
         # Build the current round with the forced winner
         sim_results[insert_into_round] = []
         sim_results[insert_into_round + 6] = []
-        
+
         # Process the previous round's teams in pairs
         for i in range(0, len(prev_round_teams), 2):
             if i + 1 >= len(prev_round_teams):
                 break
-                
+
             teamA = prev_round_teams[i]
             teamB = prev_round_teams[i + 1]
-            
+
             # If this is the matchup we're forcing
             if (teamA == team1 and teamB == team2) or (teamA == team2 and teamB == team1):
                 sim_results[insert_into_round].append(force_winner)
@@ -201,21 +206,33 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
             for i in range(0, len(prev_round), 2):
                 if i + 1 >= len(prev_round):
                     break
-                    
+
                 teamA = prev_round[i]
                 teamB = prev_round[i + 1]
 
-                _, probA, _ = odds_calculator(teamA, teamB)
-                winner = teamA if random.random() < probA else teamB
-                loser = teamB if winner == teamA else teamA
-
-                current_round.append(winner)
-                eliminated.append(loser)
+                # Only simulate if we haven't already determined the winner
+                if len(current_round) <= i // 2 or current_round[i // 2] == "":
+                    _, probA, _ = odds_calculator(teamA, teamB)
+                    winner = teamA if random.random() < probA else teamB
+                    loser = teamB if winner == teamA else teamA
+                    current_round.append(winner)
+                    eliminated.append(loser)
+                else:
+                    # Use the already determined winner
+                    winner = current_round[i // 2]
+                    loser = teamB if winner == teamA else teamA
+                    eliminated.append(loser)
 
         # Score the result
         sim_scores = calculator(sim_results)[0]
         max_score = max(sim_scores)
-        wins = [1 if score == max_score else 0 for score in sim_scores]
+
+        # Find all players with the maximum score
+        max_score_players = [i for i, score in enumerate(sim_scores) if score == max_score]
+        # Randomly select one winner from those players
+        winner_index = random.choice(max_score_players)
+        wins = [0] * len(players)
+        wins[winner_index] = 1
         return wins
 
     for _ in range(simulations):
@@ -242,10 +259,6 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
     return [baseline, team1_probs, team2_probs, delta]
 
 
-
-
-
-
 odds_array = odds_calculator(team1, team2)
 spread = odds_array[0]
 team1_win_prob = odds_array[1]
@@ -254,8 +267,8 @@ team2_win_prob = odds_array[2]
 probability_of_winning = monte_carlo(totalresults, team1, team2, round_num, team1_win_prob, team2_win_prob)
 
 j = 0
-while(j < len(players)):
-    if(team1PointsTotals[0][j] > actualPointsTotals[0][j]):
+while (j < len(players)):
+    if (team1PointsTotals[0][j] > actualPointsTotals[0][j]):
         shortTermRoot1.append(players[j])
     elif (team2PointsTotals[0][j] > actualPointsTotals[0][j]):
         shortTermRoot2.append(players[j])
@@ -267,14 +280,12 @@ while(j < len(players)):
 
     j += 1
 
-
-
 print("")
-if(team1_win_prob > team2_win_prob):
+if (team1_win_prob > team2_win_prob):
     print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
-elif(team1_win_prob < team2_win_prob):
+elif (team1_win_prob < team2_win_prob):
     print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
-elif(team1_win_prob == team2_win_prob):
+elif (team1_win_prob == team2_win_prob):
     print("The spread is evens")
 print("")
 print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
