@@ -1,11 +1,17 @@
 import json
 import sys
+from operator import truediv
+
 import pandas as pd
 import copy
 import math
 import random
 
-simulations = 100_000
+simulations = 1_000
+
+if "-prob" in sys.argv:
+    isprob = True
+    sys.argv.remove("-prob")
 
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
@@ -306,19 +312,29 @@ print("")
 print("The following players are rooting for " + team2 + " long term:")
 print(longTermRoot2)
 print("")
-df = pd.DataFrame({
-    'Player': players,
-    'Points': actualPointsTotals[0],
-    'Potential': actualPointsTotals[1],
-    'Win Prob': probability_of_winning[0],
-    f'{team1} Pts': team1PointsTotals[0],
-    f'{team1} Pot': team1PointsTotals[1],
-    f'{team1} Win Prob': probability_of_winning[1],
-    f'{team2} Pts': team2PointsTotals[0],
-    f'{team2} Pot': team2PointsTotals[1],
-    f'{team2} Win Prob': probability_of_winning[2],
-    f'Delta': probability_of_winning[3]
-})
+if(isprob):
+    df = pd.DataFrame({
+        'Player': players,
+        'Win Prob': probability_of_winning[0],
+        f'{team1} Win Prob': probability_of_winning[1],
+        f'{team2} Win Prob': probability_of_winning[2],
+        f'Delta': probability_of_winning[3]
+    })
+    df = df.sort_values(by=['Win Prob'], ascending=[False])
+else:
+    df = pd.DataFrame({
+        'Player': players,
+        'Points': actualPointsTotals[0],
+        'Potential': actualPointsTotals[1],
+        'Win Prob': probability_of_winning[0],
+        f'{team1} Pts': team1PointsTotals[0],
+        f'{team1} Pot': team1PointsTotals[1],
+        f'{team1} Win Prob': probability_of_winning[1],
+        f'{team2} Pts': team2PointsTotals[0],
+        f'{team2} Pot': team2PointsTotals[1],
+        f'{team2} Win Prob': probability_of_winning[2],
+        f'Delta': probability_of_winning[3]
+    })
 
-df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
+    df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
 print(df.to_string(index=False))
