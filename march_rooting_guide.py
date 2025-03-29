@@ -1,7 +1,5 @@
 import json
 import sys
-from operator import truediv
-
 import pandas as pd
 import copy
 import math
@@ -158,7 +156,6 @@ def odds_calculator(teamA, teamB):  ## args should be team names
         kenpom2 = kenpom.get(teamB)
 
     spread = (kenpom1 - kenpom2) * 0.68
-    spread = round(spread / 0.5) * 0.5
 
     team1_win_prob = normal_cdf(spread / 9.5)
     team2_win_prob = 1 - team1_win_prob
@@ -289,9 +286,9 @@ while (j < len(players)):
 
 print("")
 if (team1_win_prob > team2_win_prob):
-    print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
+    print("The spread is estimated to be -" + str(round(spread / 0.5) * 0.5) + " in favor of " + team1)
 elif (team1_win_prob < team2_win_prob):
-    print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
+    print("The spread is estimated to be " + str(round(spread / 0.5) * 0.5) + " in favor of " + team2)
 elif (team1_win_prob == team2_win_prob):
     print("The spread is evens")
 print("")
