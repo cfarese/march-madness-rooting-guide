@@ -5,7 +5,7 @@
             "Houston", "Gonzaga", "McNeese", "Purdue", "Illinois", "Kentucky", "UCLA", "Tennessee"],
     "sixteen": ["Auburn", "Michigan", "Ole_Miss", "Michigan_State", "Florida", "Maryland", "Texas_Tech", "Arkansas",
                 "Duke", "Arizona", "Alabama", "BYU", "Houston", "Purdue", "Kentucky", "Tennessee"],
-    "eight": ["", "", "Florida", "Texas_Tech", "Duke", "Alabama", "", ""],
+    "eight": ["Auburn", "Michigan_State", "Florida", "Texas_Tech", "Duke", "Alabama", "Houston", "Tennessee"],
     "four": ["", "", "", ""],
     "championship": ["", ""],
     "winner": [""],
@@ -15,7 +15,7 @@
                     "Xavier", "Bryant", "Akron"],
     "eliminatedr2": ["McNeese", "Texas_AM", "St._Johns", "Drake", "Creighton", "Gonzaga", "Wisconsin", "UCLA",
                       "Connecticut", "Baylor", "Illinois", "Saint_Marys", "New_Mexico", "Oregon", "Iowa_State", "Colorado_State"],
-    "eliminatedsixteen": ["Maryland", "BYU", "Arkansas", "Arizona"],
+    "eliminatedsixteen": ["Maryland", "BYU", "Arkansas", "Arizona", "Ole_Miss", "Kentucky", "Purdue", "Michigan"],
     "eliminatedeight": [],
     "eliminatedfour": [],
     "eliminatedchampionship": []

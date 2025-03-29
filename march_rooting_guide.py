@@ -7,8 +7,9 @@ import copy
 import math
 import random
 
-simulations = 1_000
+simulations = 10_000
 
+isprob = False
 if "-prob" in sys.argv:
     isprob = True
     sys.argv.remove("-prob")
