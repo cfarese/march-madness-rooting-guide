@@ -5,15 +5,8 @@ import copy
 import math
 import random
 
-
 simulations = 100_000
 
-# Check for -prob flag and remove it from arguments
-show_prob_only = "-prob" in sys.argv
-if show_prob_only:
-    sys.argv.remove("-prob")
-
-# Now process the remaining arguments
 with open(sys.argv[1], "r") as file:
     bracket = json.load(file)
 
@@ -46,7 +39,6 @@ winnerpicks = []
 
 players = []
 
-# Process all arguments except the first 4 (script name, results.json, team1, team2, round_num)
 for arg in sys.argv[5:]:
     with open(arg, "r") as file:
         bracket = json.load(file)
@@ -152,16 +144,11 @@ def normal_cdf(x, mean=0, std=1):
 
 
 def odds_calculator(teamA, teamB):  ## args should be team names
+
     with open("kenpom.json", "r") as file:
         kenpom = json.load(file)
         kenpom1 = kenpom.get(teamA)
         kenpom2 = kenpom.get(teamB)
-
-        # If either team is not in KenPom, use a default rating of 20
-        if kenpom1 is None:
-            kenpom1 = 20
-        if kenpom2 is None:
-            kenpom2 = 20
 
     spread = (kenpom1 - kenpom2) * 0.68
     spread = round(spread / 0.5) * 0.5
@@ -180,47 +167,20 @@ def monte_carlo(results, team1, team2, round_num, team1_win_prob, team2_win_prob
         sim_results = copy.deepcopy(results)
         insert_into_round = int(round_num) - 1
 
-        # First, simulate all rounds up to but not including the target round
-        for round_index in range(0, insert_into_round):
-            prev_round = sim_results[round_index]
-            sim_results[round_index + 1] = []
-            sim_results[round_index + 7] = []
-            current_round = sim_results[round_index + 1]
-            eliminated = sim_results[round_index + 7]
+        # Get the teams from the previous round
+        prev_round_teams = sim_results[insert_into_round - 1] if insert_into_round > 0 else []
 
-            # Process teams in pairs
-            for i in range(0, len(prev_round), 2):
-                if i + 1 >= len(prev_round):
-                    break
-
-                teamA = prev_round[i]
-                teamB = prev_round[i + 1]
-
-                # Only simulate if we haven't already determined the winner
-                if len(current_round) <= i // 2 or current_round[i // 2] == "":
-                    _, probA, _ = odds_calculator(teamA, teamB)
-                    winner = teamA if random.random() < probA else teamB
-                    loser = teamB if winner == teamA else teamA
-                    current_round.append(winner)
-                    eliminated.append(loser)
-                else:
-                    # Use the already determined winner
-                    winner = current_round[i // 2]
-                    loser = teamB if winner == teamA else teamA
-                    eliminated.append(loser)
-
-        # Now handle the target round with the forced winner
-        prev_round = sim_results[insert_into_round - 1]
+        # Build the current round with the forced winner
         sim_results[insert_into_round] = []
         sim_results[insert_into_round + 6] = []
 
         # Process the previous round's teams in pairs
-        for i in range(0, len(prev_round), 2):
-            if i + 1 >= len(prev_round):
+        for i in range(0, len(prev_round_teams), 2):
+            if i + 1 >= len(prev_round_teams):
                 break
 
-            teamA = prev_round[i]
-            teamB = prev_round[i + 1]
+            teamA = prev_round_teams[i]
+            teamB = prev_round_teams[i + 1]
 
             # If this is the matchup we're forcing
             if (teamA == team1 and teamB == team2) or (teamA == team2 and teamB == team1):
@@ -320,57 +280,45 @@ while (j < len(players)):
 
     j += 1
 
-if show_prob_only:
-    df = pd.DataFrame({
-        'Player': players,
-        'Win Prob': probability_of_winning[0],
-        f'{team1} Win Prob': probability_of_winning[1],
-        f'{team2} Win Prob': probability_of_winning[2],
-        'Delta': probability_of_winning[3]
-    })
-    df = df.sort_values(by=['Win Prob'], ascending=False)
-    print(df.to_string(index=False))
-    #df.to_csv('df.csv', index=False)
-else:
-    print("")
-    if (team1_win_prob > team2_win_prob):
-        print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
-    elif (team1_win_prob < team2_win_prob):
-        print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
-    elif (team1_win_prob == team2_win_prob):
-        print("The spread is evens")
-    print("")
-    print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
-    print(team2 + " has an estimated win probability of " + str(round(team2_win_prob * 100, 2)) + "%")
-    print("")
-    print("Probabilities calculated based on " + str(simulations) + " simulations")
-    print("")
-    print("The following players are rooting for " + team1 + " short term:")
-    print(shortTermRoot1)
-    print("")
-    print("The following players are rooting for " + team2 + " short term:")
-    print(shortTermRoot2)
-    print("")
-    print("")
-    print("The following players are rooting for " + team1 + " long term:")
-    print(longTermRoot1)
-    print("")
-    print("The following players are rooting for " + team2 + " long term:")
-    print(longTermRoot2)
-    print("")
+print("")
+if (team1_win_prob > team2_win_prob):
+    print("The spread is estimated to be -" + str(spread) + " in favor of " + team1)
+elif (team1_win_prob < team2_win_prob):
+    print("The spread is estimated to be " + str(spread) + " in favor of " + team2)
+elif (team1_win_prob == team2_win_prob):
+    print("The spread is evens")
+print("")
+print(team1 + " has an estimated win probability of " + str(round(team1_win_prob * 100, 2)) + "%")
+print(team2 + " has an estimated win probability of " + str(round(team2_win_prob * 100, 2)) + "%")
+print("")
+print("Probabilities calculated based on " + str(simulations) + " simulations")
+print("")
+print("The following players are rooting for " + team1 + " short term:")
+print(shortTermRoot1)
+print("")
+print("The following players are rooting for " + team2 + " short term:")
+print(shortTermRoot2)
+print("")
+print("")
+print("The following players are rooting for " + team1 + " long term:")
+print(longTermRoot1)
+print("")
+print("The following players are rooting for " + team2 + " long term:")
+print(longTermRoot2)
+print("")
+df = pd.DataFrame({
+    'Player': players,
+    'Points': actualPointsTotals[0],
+    'Potential': actualPointsTotals[1],
+    'Win Prob': probability_of_winning[0],
+    f'{team1} Pts': team1PointsTotals[0],
+    f'{team1} Pot': team1PointsTotals[1],
+    f'{team1} Win Prob': probability_of_winning[1],
+    f'{team2} Pts': team2PointsTotals[0],
+    f'{team2} Pot': team2PointsTotals[1],
+    f'{team2} Win Prob': probability_of_winning[2],
+    f'Delta': probability_of_winning[3]
+})
 
-    df = pd.DataFrame({
-        'Player': players,
-        'Points': actualPointsTotals[0],
-        'Potential': actualPointsTotals[1],
-        'Win Prob': probability_of_winning[0],
-        f'{team1} Pts': team1PointsTotals[0],
-        f'{team1} Pot': team1PointsTotals[1],
-        f'{team1} Win Prob': probability_of_winning[1],
-        f'{team2} Pts': team2PointsTotals[0],
-        f'{team2} Pot': team2PointsTotals[1],
-        f'{team2} Win Prob': probability_of_winning[2],
-        'Delta': probability_of_winning[3]
-    })
-    df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
-    print(df.to_string(index=False))
+df = df.sort_values(by=['Points', 'Potential'], ascending=[False, False])
+print(df.to_string(index=False))
